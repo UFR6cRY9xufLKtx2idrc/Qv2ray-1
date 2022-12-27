@@ -24,6 +24,8 @@ jobs:
     env:
       CC: ${{ matrix.config.cc }}
       CXX: ${{ matrix.config.cxx }}
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.config.vcpkgTriplet }}
+      VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed/
     name: '${{ matrix.config.name }}'
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -68,25 +70,15 @@ jobs:
       uses: jurplel/install-qt-action@v3
       with:
         version: 6.4.1
-        py7zrversion: ' '
-        aqtversion: ' '
         setup-python: false
-
-    - name: get-cmake
-      uses: lukka/get-cmake@latest
 
     - name: run-vcpkg
       uses: lukka/run-vcpkg@v10
       with:
         vcpkgGitCommitId: "cc2dd8fed39acc588c9a9a04b1ea4d04ce5308f0"
         vcpkgJsonGlob: '**/vcpkg.json'
-
-    - name: run-cmake
-      uses: lukka/run-cmake@v10
-      with:
-        configurePreset: 'ninja-multi-vcpkg'
-        buildPreset: 'ninja-multi-vcpkg'
-
+        runVcpkgInstall: true
+  
     - name: Build
       run: |
         mkdir build; cd build
