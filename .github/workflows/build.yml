@@ -41,18 +41,6 @@ jobs:
             has_release: true,
             vcpkgTriplet: x64-windows
           }
-        - {
-            name: "Ubuntu", artifact: "Linux",
-            os: ubuntu-latest,
-            has_release: false,
-            vcpkgTriplet: x64-linux
-          }
-        - {
-            name: "macOS", artifact: "macOS",
-            os: macos-latest,
-            has_release: true,
-            vcpkgTriplet: x64-osx
-          }
 
     steps:
     - uses: actions/checkout@v3
@@ -73,10 +61,10 @@ jobs:
         setup-python: false
 
     - name: run-vcpkg
-      uses: lukka/run-vcpkg@v7.5
+      uses: lukka/run-vcpkg@v3
       with:
         vcpkgArguments: protobuf openssl grpc libuv uvw
-        vcpkgGitCommitId: c69096659f49e2b1aca532ea5c2f8c135182519b
+        vcpkgGitCommitId: "cc2dd8fed39acc588c9a9a04b1ea4d04ce5308f0"
         vcpkgTriplet: ${{ matrix.config.vcpkgTriplet }}
   
     - name: Build
