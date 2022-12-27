@@ -13,6 +13,7 @@ on:
       - 'LICENSE'
   release:
     types: [prereleased]
+  workflow_dispatch:
 
 defaults:
   run:
@@ -66,9 +67,9 @@ jobs:
       uses: ilammy/msvc-dev-cmd@v1
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v2.14.0
+      uses: jurplel/install-qt-action@v3
       with:
-        version: 6.2.2
+        version: 6.4.1
         py7zrversion: ' '
         aqtversion: ' '
         setup-python: false
@@ -108,13 +109,11 @@ jobs:
         path: Qv2ray.7z
 
     - name: Get the version
-      if: github.event_name == 'release' && matrix.config.has_release
       id: get_version
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
 
     - name: Upload to GitHub Release
       uses: svenstaro/upload-release-action@v2
-      if: github.event_name == 'release' && matrix.config.has_release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: Qv2ray.7z
