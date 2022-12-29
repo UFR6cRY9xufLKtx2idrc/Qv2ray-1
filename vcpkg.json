@@ -1,5 +1,5 @@
 {
-	"name": "Qv2ray-1",
+	"name": "qv2ray",
 	"version-string":  "0.0.1",
 	"dependencies": [
 		"openssl",
