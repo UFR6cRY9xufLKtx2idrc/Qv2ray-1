@@ -13,7 +13,6 @@ on:
       - 'LICENSE'
   release:
     types: [prereleased]
-  workflow_dispatch:
 
 defaults:
   run:
@@ -41,6 +40,18 @@ jobs:
             has_release: true,
             vcpkgTriplet: x64-windows
           }
+        - {
+            name: "Ubuntu", artifact: "Linux",
+            os: ubuntu-latest,
+            has_release: false,
+            vcpkgTriplet: x64-linux
+          }
+        - {
+            name: "macOS", artifact: "macOS",
+            os: macos-latest,
+            has_release: true,
+            vcpkgTriplet: x64-osx
+          }
 
     steps:
     - uses: actions/checkout@v3
@@ -49,10 +60,14 @@ jobs:
 
     - name: Install ninja-build tool
       uses: seanmiddleditch/gha-setup-ninja@v3
+      with:
+        version: 1.11.1
 
     - name: Install MSVC compiler
       if: matrix.config.has_msvc
       uses: ilammy/msvc-dev-cmd@v1
+      with:
+        toolset: 14.29
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
@@ -61,11 +76,11 @@ jobs:
         setup-python: false
 
     - name: run-vcpkg
-      uses: lukka/run-vcpkg@v5
+      uses: lukka/run-vcpkg@v10
       with:
-        vcpkgArguments: protobuf openssl grpc libuv uvw
-        vcpkgGitCommitId: "cc2dd8fed39acc588c9a9a04b1ea4d04ce5308f0"
-        vcpkgTriplet: ${{ matrix.config.vcpkgTriplet }}
+        vcpkgGitCommitId: '659b6b5eeacb50ffe25856413960d231ce1a4b58'
+        vcpkgJsonGlob: '**/vcpkg.json'
+        runVcpkgInstall: true
   
     - name: Build
       run: |
